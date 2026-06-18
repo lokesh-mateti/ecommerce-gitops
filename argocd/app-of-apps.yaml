@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecommerce-app-of-apps
+  namespace: argocd
+  annotations:
+    # This is the root Application — it bootstraps all other Applications.
+    # Apply this once manually: kubectl apply -f argocd/app-of-apps.yaml
+    # After that, ArgoCD manages everything else automatically via GitOps.
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/lokesh-mateti/ecommerce-gitops.git).
+    targetRevision: HEAD
+    path: argocd/applications
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

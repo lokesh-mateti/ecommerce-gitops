@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: product-service
+  namespace: argocd
+  labels:
+    app: product-service
+    environment: dev
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/lokesh-mateti/ecommerce-gitops.git
+    targetRevision: HEAD
+    path: apps/product-service
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-dev.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ecommerce-dev
+
+  syncPolicy:
+    automated:
+      prune: true       # Remove resources deleted from git
+      selfHeal: true    # Revert manual changes made directly in cluster
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 1m
