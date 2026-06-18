@@ -1,0 +1,73 @@
+replicaCount: 2
+
+image:
+  repository: ""
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+livenessProbe:
+  path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+
+readinessProbe:
+  path: /health
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: true
+  className: alb
+  host: ""
+  path: /
+
+env:
+  - name: APP_NAME
+    value: "api-gateway"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: PRODUCT_SERVICE_URL
+    value: "http://product-service.default.svc.cluster.local"
+  - name: ORDER_SERVICE_URL
+    value: "http://order-service.default.svc.cluster.local"
+
+# JWT_SECRET_KEY is intentionally NOT here as plaintext.
+# It's injected via a Kubernetes Secret reference in deployment.yaml (envFrom secretRef).
+# Create the secret manually or via External Secrets Operator / Sealed Secrets:
+#   kubectl create secret generic api-gateway-secret --from-literal=JWT_SECRET_KEY=<your-secret>
+secretName: api-gateway-secret
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL

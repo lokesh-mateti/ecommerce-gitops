@@ -1,0 +1,14 @@
+replicaCount: 2
+
+image:
+  repository: "REPLACE_WITH_ECR_REPO_URL/order-service"
+  tag: "latest"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+
+ingress:
+  enabled: true
+  host: "staging.order-service.example.com"

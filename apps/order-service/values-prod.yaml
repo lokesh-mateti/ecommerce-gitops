@@ -1,0 +1,23 @@
+replicaCount: 3
+
+image:
+  repository: "REPLACE_WITH_ECR_REPO_URL/order-service"
+  tag: "latest"
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+
+ingress:
+  enabled: true
+  host: "order-service.example.com"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
