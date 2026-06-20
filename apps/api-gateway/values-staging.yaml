@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/api-gateway"
-  tag: "latest"
+  tag: 11-bfae099
 
 autoscaling:
   enabled: true
