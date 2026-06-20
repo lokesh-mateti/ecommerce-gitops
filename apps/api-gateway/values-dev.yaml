@@ -2,14 +2,31 @@ replicaCount: 1
 
 image:
   repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/api-gateway"
-  tag: 12-a423fb3
+  tag: 10-bfae099
 
 autoscaling:
   enabled: false
 
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
 ingress:
   enabled: true
-  host: "dev.api.example.com"
+  className: alb
+  host: ""
+  path: /
+
+env:
+  - name: APP_NAME
+    value: "api-gateway"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: PRODUCT_SERVICE_URL
+    value: "http://product-service.ecommerce-dev.svc.cluster.local"
+  - name: ORDER_SERVICE_URL
+    value: "http://order-service.ecommerce-dev.svc.cluster.local"
 
 resources:
   requests:
