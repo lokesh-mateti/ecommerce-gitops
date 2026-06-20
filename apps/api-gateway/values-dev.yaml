@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: "REPLACE_WITH_ECR_REPO_URL/api-gateway"
+  repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/api-gateway"
   tag: "latest"
 
 autoscaling:

@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: "REPLACE_WITH_ECR_REPO_URL/order-service"
+  repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/order-service"
   tag: "latest"
 
 autoscaling:
