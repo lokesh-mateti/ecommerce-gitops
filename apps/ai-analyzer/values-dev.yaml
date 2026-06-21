@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/ai-analyzer"
+  tag: latest
+
+autoscaling:
+  enabled: false
+
+ingress:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 150m
+    memory: 128Mi
