@@ -8,7 +8,7 @@ autoscaling:
   enabled: false
 
 ingress:
-  enabled: true
+  enabled: false
   host: "dev.order-service.example.com"
 
 resources:
