@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/ai-analyzer"
-  tag: 28-665d726
+  tag: 29-80e741e
 
 autoscaling:
   enabled: false
