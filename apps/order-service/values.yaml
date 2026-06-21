@@ -46,7 +46,7 @@ env:
   - name: LOG_LEVEL
     value: "info"
   - name: PRODUCT_SERVICE_URL
-    value: "http://product-service.default.svc.cluster.local"
+    value: "http://product-service.ecommerce-dev.svc.cluster.local"
 
 serviceAccount:
   create: true
