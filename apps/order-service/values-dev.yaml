@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: "396913737205.dkr.ecr.us-east-1.amazonaws.com/order-service"
-  tag: 63-550235d
+  tag: 67-86d6a95
 
 autoscaling:
   enabled: false
