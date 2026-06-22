@@ -40,13 +40,15 @@ ecommerce-gitops/
 │   │       ├── hpa.yaml
 │   │       └── ingress.yaml
 │   ├── order-service/            # Same structure
-│   └── product-service/          # Same structure
+│   ├── product-service/          # Same structure
+│   └── ai-analyzer/              # AIOps failure analysis service
 └── argocd/
     ├── app-of-apps.yaml          # Root Application — bootstraps everything
     └── applications/
         ├── api-gateway-app.yaml
         ├── order-service-app.yaml
-        └── product-service-app.yaml
+        ├── product-service-app.yaml
+        └── ai-analyzer-app.yaml
 ```
 
 ---
@@ -62,7 +64,10 @@ Each service has its own Helm chart under `apps/<service-name>/`. The chart is e
 | `values-staging.yaml` | Staging | Mid-tier replicas, autoscaling enabled |
 | `values-prod.yaml` | Prod | High replicas, aggressive autoscaling, prod ingress host |
 
+> **Note:** `values-dev.yaml` completely overrides any matching key from `values.yaml` (Helm last-file-wins). When adding new env vars or config, add them to both files to avoid missing values in dev.
+
 ### Render a chart locally
+
 ```bash
 helm template apps/product-service \
   -f apps/product-service/values.yaml \
@@ -74,19 +79,22 @@ helm template apps/product-service \
 ## 🔧 ArgoCD Setup
 
 ### Install ArgoCD in EKS
+
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
 ### Bootstrap with app-of-apps (run once)
+
 ```bash
 kubectl apply -f argocd/app-of-apps.yaml
 ```
 
-After this single command, ArgoCD manages all three service Applications automatically — any change pushed to this repo is detected and synced to the cluster within minutes.
+After this single command, ArgoCD manages all four service Applications automatically — any change pushed to this repo is detected and synced to the cluster within minutes.
 
 ### Access ArgoCD UI
+
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 # Open https://localhost:8080
@@ -100,14 +108,21 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 ## 🔐 Secret Management
 
-Secrets (JWT key, DB passwords) are **never stored in this repo**. They are created as Kubernetes Secrets directly in the cluster:
+Secrets (JWT key, API keys) are **never stored in this repo**. They are created as Kubernetes Secrets directly in the cluster:
 
 ```bash
 # Create api-gateway JWT secret before first deploy
 kubectl create secret generic api-gateway-secret \
   --from-literal=JWT_SECRET_KEY=<your-strong-secret> \
   -n ecommerce-dev
+
+# Create ai-analyzer Gemini API key
+kubectl create secret generic ai-analyzer-secret \
+  --from-literal=GEMINI_API_KEY=<your-gemini-key> \
+  -n ecommerce-dev
 ```
+
+Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com).
 
 For production, use **External Secrets Operator** or **Sealed Secrets** to manage secrets via GitOps without exposing plaintext values.
 
@@ -131,4 +146,4 @@ git push origin main
 
 **Lokesh Mateti**
 - GitHub: [@lokesh-mateti](https://github.com/lokesh-mateti)
-- LinkedIn: [linkedin.com/in/lokesh-mateti](https://linkedin.com/in/lokesh-mateti)
+- LinkedIn: [linkedin.com/in/lokeshmateti](https://www.linkedin.com/in/lokeshmateti/)
