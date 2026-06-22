@@ -49,6 +49,8 @@ env:
     value: "http://product-service.default.svc.cluster.local"
   - name: ORDER_SERVICE_URL
     value: "http://order-service.default.svc.cluster.local"
+  - name: AI_ANALYZER_URL
+    value: "http://ai-analyzer.ecommerce-dev.svc.cluster.local"
 
 # JWT_SECRET_KEY is intentionally NOT here as plaintext.
 # It's injected via a Kubernetes Secret reference in deployment.yaml (envFrom secretRef).
