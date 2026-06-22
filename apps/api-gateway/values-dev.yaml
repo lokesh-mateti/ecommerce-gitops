@@ -27,6 +27,8 @@ env:
     value: "http://product-service.ecommerce-dev.svc.cluster.local"
   - name: ORDER_SERVICE_URL
     value: "http://order-service.ecommerce-dev.svc.cluster.local"
+  - name: AI_ANALYZER_URL
+    value: "http://ai-analyzer.ecommerce-dev.svc.cluster.local"
 
 resources:
   requests:
